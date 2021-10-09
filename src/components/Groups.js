@@ -1,13 +1,13 @@
 import {Button} from 'react-bootstrap'
 import Table from './GroupsTable'
 
-function Groups() {
+function Groups({ groups }) {
 	return (
 		<>
 			<Button variant='outline-primary' size='lg'>
 				Add group
 			</Button>
-			<Table columns={['id','name','description']} />
+			<Table columns={['ID', 'Name', 'Description', 'Actions']} data={groups} />
 		</>
 	)
 }

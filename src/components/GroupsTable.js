@@ -1,22 +1,6 @@
-/** @format */
-
-import axios from 'axios'
-import { useEffect, useState } from 'react'
 import { Table, Button } from 'react-bootstrap'
-import { usersEndpoint, baseURL, groupsEndpoint } from '../constants/endpoints'
 
-function UsersTable({ columns = [] }) {
-	const [data, setData] = useState([])
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const result = await axios(`${baseURL}${groupsEndpoint.get()}`)
-			setData(result.data)
-		}
-		fetchData()
-	}, [])
-	console.log(data)
-
+function UsersTable({ columns = [], data }) {
 	return (
 		<Table responsive>
 			<thead>
@@ -24,14 +8,13 @@ function UsersTable({ columns = [] }) {
 					{columns.map((column, index) => (
 						<th key={index}>{column}</th>
 					))}
-					<th>actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				{data.map(({ id, name, description }) => (
+				{data.map(({ id, namegroups, description }) => (
 					<tr>
 						<td>{id}</td>
-						<td>{name}</td>
+						<td>{namegroups}</td>
 						<td>{description}</td>
 						<td>
 							<Button variant='outline-success'>Edit</Button>{' '}
