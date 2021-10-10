@@ -1,6 +1,17 @@
+import axios from 'axios'
+import { groupsEndpoint } from '../constants/endpoints'
 import { Table, Button } from 'react-bootstrap'
 
-function UsersTable({ columns = [], data }) {
+export const GroupsTable = ({ columns = [], data, setData }) => {
+	const handleDelete = async (id) => {
+		try {
+			await axios.delete(groupsEndpoint.delete(id))
+			setData(data.filter((record) => record.id !== id))
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
 	return (
 		<Table responsive>
 			<thead>
@@ -12,13 +23,15 @@ function UsersTable({ columns = [], data }) {
 			</thead>
 			<tbody>
 				{data.map(({ id, namegroups, description }) => (
-					<tr>
+					<tr key={id}>
 						<td>{id}</td>
 						<td>{namegroups}</td>
 						<td>{description}</td>
 						<td>
 							<Button variant='outline-success'>Edit</Button>{' '}
-							<Button variant='outline-danger'>Delete</Button>
+							<Button variant='outline-danger' onClick={() => handleDelete(id)}>
+								Delete
+							</Button>
 						</td>
 					</tr>
 				))}
@@ -26,5 +39,3 @@ function UsersTable({ columns = [], data }) {
 		</Table>
 	)
 }
-
-export default UsersTable

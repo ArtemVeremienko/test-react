@@ -1,14 +1,26 @@
-import {Button} from 'react-bootstrap'
-import Table from './GroupsTable'
+import { useState } from 'react'
+import { Button } from 'react-bootstrap'
+import { ModalForm } from './ModalForm'
+import { GroupsTable } from './GroupsTable'
 
-function Groups({ groups }) {
+function Groups({ groups, setGroups }) {
+	const [isShow, setIsShow] = useState(false)
+
+	const handleShow = () => setIsShow(true)
+
 	return (
-		<>
-			<Button variant='outline-primary' size='lg'>
+		<div className='tab'>
+			<Button className='add-button' variant='outline-primary' size='lg' onClick={handleShow}>
 				Add group
 			</Button>
-			<Table columns={['ID', 'Name', 'Description', 'Actions']} data={groups} />
-		</>
+			<GroupsTable
+				columns={['ID', 'Name', 'Description', 'Actions']}
+				data={groups}
+				setData={setGroups}
+			/>
+
+			<ModalForm title='Add new group' isShow={isShow} setIsShow={setIsShow} />
+		</div>
 	)
 }
 
