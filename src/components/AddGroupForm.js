@@ -1,26 +1,52 @@
+import { useState } from 'react'
+import axios from 'axios'
+import { groupsEndpoint } from '../constants/endpoints'
 import { Form, Button } from 'react-bootstrap'
 
-export const AddUserForm = ({ groups, onSuccessSubmit }) => {
-	const handleSubmit = (e) => {
+export const AddGroupForm = ({ onSubmit }) => {
+	const [formValues, setFormValues] = useState({
+		namegroups: '',
+		description: '',
+	})
+
+	const handleInputChange = (e) => {
+		const target = e.target
+		const value = target.value
+		const name = target.name
+		setFormValues((prev) => ({ ...prev, [name]: value }))
+	}
+
+	const handleSubmit = async (e) => {
 		e.preventDefault()
-		console.log('submit')
-		onSuccessSubmit()
+		try {
+			const result = await axios.post(groupsEndpoint.create(), formValues)
+			onSubmit(result.data)
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	return (
 		<Form onSubmit={handleSubmit}>
 			<Form.Group className='mb-3' controlId='formUsername'>
-				<Form.Label>Username:</Form.Label>
-				<Form.Control type='text' placeholder='Enter your name' />
+				<Form.Label>Group name:</Form.Label>
+				<Form.Control
+					name='namegroups'
+					value={formValues.namegroups}
+					onChange={handleInputChange}
+					type='text'
+					placeholder='Enter your group name'
+				/>
 			</Form.Group>
-			<Form.Group className='mb-3' controlId='formGroupPassword'>
-				<Form.Label>Group:</Form.Label>
-				<Form.Select>
-					<option>Select your group</option>
-					{groups.map((group) => (
-						<option value={group.id}>{group.namegroups}</option>
-					))}
-				</Form.Select>
+			<Form.Group className='mb-3' controlId='formUsername'>
+				<Form.Label>Description:</Form.Label>
+				<Form.Control
+					name='description'
+					value={formValues.description}
+					onChange={handleInputChange}
+					type='text'
+					placeholder='Enter your group description'
+				/>
 			</Form.Group>
 			<Button variant='primary' type='submit'>
 				Add
