@@ -28,7 +28,7 @@ function App() {
 		fetchData()
 	}, [])
 
-	const handleModalClose = () => setModal({})
+	const handleModalClose = () => setModal({ isShow: false })
 
 	return (
 		<Container>
@@ -46,7 +46,11 @@ function App() {
 					/>
 				</Tab>
 				<Tab eventKey='groups' title='Groups'>
-					<Groups groups={groups} setGroups={setGroups} setModal={setModal} />
+					<Groups
+						groups={groups}
+						setGroups={setGroups}
+						setModal={setModal}
+					/>
 				</Tab>
 			</Tabs>
 			<ModalForm onClose={handleModalClose} {...modal} />
