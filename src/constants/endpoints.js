@@ -2,7 +2,7 @@ const baseURL = 'http://127.0.0.1:8000/api/'
 
 const createEndpoints = (path) => ({
 	get: () => `${baseURL}list-${path}/`,
-	create: (id) => `${baseURL}list-${path}/create/`,
+	create: () => `${baseURL}list-${path}/create/`,
 	update: (id) => `${baseURL}list-${path}/update/${id}/`,
 	delete: (id) => `${baseURL}list-${path}/delete/${id}/`,
 })

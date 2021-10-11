@@ -1,12 +1,10 @@
 import { Modal } from 'react-bootstrap'
 
 export const ModalForm = ({
-	title,
-	isShow,
-	bodyComponent: BodyComponent,
-	groups,
+	isShow = false,
+	title ,
+	bodyComponent,
 	onClose,
-	onSubmit,
 }) => {
 	return (
 		<>
@@ -15,11 +13,7 @@ export const ModalForm = ({
 					<Modal.Title>{title}</Modal.Title>
 				</Modal.Header>
 
-				{BodyComponent && (
-					<Modal.Body>
-						<BodyComponent groups={groups} onSubmit={onSubmit} />
-					</Modal.Body>
-				)}
+				{bodyComponent && <Modal.Body>{bodyComponent}</Modal.Body>}
 			</Modal>
 		</>
 	)

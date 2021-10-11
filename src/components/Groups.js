@@ -1,21 +1,20 @@
-/** @format */
-
-import { useState } from 'react'
 import { Button } from 'react-bootstrap'
-import { ModalForm } from './ModalForm'
 import { GroupsTable } from './GroupsTable'
-import { AddGroupForm } from './AddGroupForm'
+import { GroupForm } from './GroupForm'
 
-function Groups({ groups, setGroups }) {
-	const [isShow, setIsShow] = useState(false)
+function Groups({ groups, setGroups, setModal }) {
 
-	const handleShow = () => setIsShow(true)
-	const handleClose = () => setIsShow(false)
 
 	const handleModalSubmit = (group) => {
 		setGroups((prev) => [...prev, group])
-		handleClose()
+		setModal({ isShow: false })
 	}
+
+	const handleShowModal = () => setModal({
+		isShow: true,
+		title: 'Add new group',
+		bodyComponent: <GroupForm onSubmit={handleModalSubmit}/>
+	})
 
 	return (
 		<div className='tab'>
@@ -23,7 +22,7 @@ function Groups({ groups, setGroups }) {
 				className='add-button'
 				variant='outline-primary'
 				size='lg'
-				onClick={handleShow}
+				onClick={handleShowModal}
 			>
 				Add group
 			</Button>
@@ -31,14 +30,7 @@ function Groups({ groups, setGroups }) {
 				columns={['ID', 'Name', 'Description', 'Actions']}
 				data={groups}
 				setData={setGroups}
-			/>
-
-			<ModalForm
-				title='Add new group'
-				isShow={isShow}
-				bodyComponent={AddGroupForm}
-				onClose={handleClose}
-				onSubmit={handleModalSubmit}
+				setModal={setModal}
 			/>
 		</div>
 	)

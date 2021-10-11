@@ -3,7 +3,12 @@ import { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { usersEndpoint } from '../constants/endpoints'
 
-export const AddUserForm = ({ groups, onSubmit }) => {
+export const UserForm = ({
+	groups = [],
+	onSubmit,
+	id,
+	submitButtonText = '+ Add',
+}) => {
 	const [formValues, setFormValues] = useState({
 		username: '',
 		group_id: '',
@@ -19,7 +24,9 @@ export const AddUserForm = ({ groups, onSubmit }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const result = await axios.post(usersEndpoint.create(), formValues)
+			const result = id
+				? await axios.put(usersEndpoint.update(id), formValues)
+				: await axios.post(usersEndpoint.create(), formValues)
 			onSubmit(result.data)
 		} catch (err) {
 			console.error(err)
@@ -40,7 +47,11 @@ export const AddUserForm = ({ groups, onSubmit }) => {
 			</Form.Group>
 			<Form.Group className='mb-3' controlId='formGroupPassword'>
 				<Form.Label>Group:</Form.Label>
-				<Form.Select value={formValues.group_id} onChange={handleInputChange} name='group_id'>
+				<Form.Select
+					value={formValues.group_id}
+					onChange={handleInputChange}
+					name='group_id'
+				>
 					<option value=''>Select your group</option>
 					{groups.map((group) => (
 						<option value={group.id} key={group.id}>
@@ -50,7 +61,7 @@ export const AddUserForm = ({ groups, onSubmit }) => {
 				</Form.Select>
 			</Form.Group>
 			<Button variant='primary' type='submit'>
-				+ Add
+				{submitButtonText}
 			</Button>
 		</Form>
 	)

@@ -4,11 +4,13 @@ import { groupsEndpoint, usersEndpoint } from './constants/endpoints'
 import { Container, Tabs, Tab } from 'react-bootstrap'
 import './App.css'
 import { Users } from './components/Users'
+import { ModalForm } from './components/ModalForm'
 import Groups from './components/Groups'
 
 function App() {
 	const [users, setUsers] = useState([])
 	const [groups, setGroups] = useState([])
+	const [modal, setModal] = useState({})
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -26,16 +28,28 @@ function App() {
 		fetchData()
 	}, [])
 
+	const handleModalClose = () => setModal({})
+
 	return (
 		<Container>
-			<Tabs defaultActiveKey='users' id='uncontrolled-tab-example' className='mb-3'>
+			<Tabs
+				defaultActiveKey='users'
+				id='uncontrolled-tab-example'
+				className='mb-3'
+			>
 				<Tab eventKey='users' title='Users'>
-					<Users users={users} setUsers={setUsers} groups={groups} />
+					<Users
+						users={users}
+						setUsers={setUsers}
+						groups={groups}
+						setModal={setModal}
+					/>
 				</Tab>
 				<Tab eventKey='groups' title='Groups'>
-					<Groups groups={groups} setGroups={setGroups} />
+					<Groups groups={groups} setGroups={setGroups} setModal={setModal} />
 				</Tab>
 			</Tabs>
+			<ModalForm onClose={handleModalClose} {...modal} />
 		</Container>
 	)
 }

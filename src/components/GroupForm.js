@@ -3,7 +3,7 @@ import axios from 'axios'
 import { groupsEndpoint } from '../constants/endpoints'
 import { Form, Button } from 'react-bootstrap'
 
-export const AddGroupForm = ({ onSubmit }) => {
+export const GroupForm = ({ onSubmit, id, submitButtonText = '+ Add' }) => {
 	const [formValues, setFormValues] = useState({
 		namegroups: '',
 		description: '',
@@ -19,7 +19,9 @@ export const AddGroupForm = ({ onSubmit }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const result = await axios.post(groupsEndpoint.create(), formValues)
+			const result = id
+				? await axios.put(groupsEndpoint.update(id), formValues)
+				: await axios.post(groupsEndpoint.create(), formValues)
 			onSubmit(result.data)
 		} catch (err) {
 			console.error(err)
@@ -49,7 +51,7 @@ export const AddGroupForm = ({ onSubmit }) => {
 				/>
 			</Form.Group>
 			<Button variant='primary' type='submit'>
-				Add
+				{submitButtonText}
 			</Button>
 		</Form>
 	)

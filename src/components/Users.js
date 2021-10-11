@@ -1,42 +1,38 @@
-import { useState, useMemo } from 'react'
 import { Button } from 'react-bootstrap'
-import { ModalForm } from './ModalForm'
-import { AddUserForm } from './AddUserForm'
+import { UserForm } from './UserForm'
 import { UsersTable } from './UsersTable'
 
-export const Users = ({ users, setUsers, groups }) => {
-	const [isShow, setIsShow] = useState(false)
-	const groupsMap = useMemo(
-		() => groups.reduce((acc, group) => ({ ...acc, [group.id]: group.namegroups }), {}),
-		[groups]
-	)
-	const handleShow = () => setIsShow(true)
-
-	const handleClose = () => setIsShow(false)
-
+export const Users = ({ users, setUsers, groups, setModal }) => {
 	const handleModalSubmit = (user) => {
 		setUsers((prev) => [...prev, user])
-		handleClose()
+		setModal({ isShow: false })
 	}
+
+	const handleShowModal = () =>
+		setModal({
+			title: 'Add new user',
+			isShow: true,
+			bodyComponent: (
+				<UserForm groups={groups} onSubmit={handleModalSubmit} />
+			),
+		})
 
 	return (
 		<div className='tab'>
-			<Button className='add-button' variant='outline-primary' size='lg' onClick={handleShow}>
+			<Button
+				className='add-button'
+				variant='outline-primary'
+				size='lg'
+				onClick={handleShowModal}
+			>
 				Add user
 			</Button>
 			<UsersTable
 				columns={['ID', 'Username', 'Created', 'Group', 'Actions']}
 				data={users}
 				setData={setUsers}
-				groupsMap={groupsMap}
-			/>
-			<ModalForm
-				title='Add new user'
-				isShow={isShow}
-				bodyComponent={AddUserForm}
 				groups={groups}
-				onClose={handleClose}
-				onSubmit={handleModalSubmit}
+				setModal={setModal}
 			/>
 		</div>
 	)
