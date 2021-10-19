@@ -3,37 +3,45 @@ import { groupsEndpoint } from '../constants/endpoints'
 import { Table, Button } from 'react-bootstrap'
 import { GroupForm } from './GroupForm'
 
-export const GroupsTable = ({ columns = [], data, setData, setModal }) => {
+export const GroupsTable = ({
+	columns = [],
+	data,
+	setData,
+	setModal,
+	setError,
+}) => {
 	const handleDelete = async (id) => {
 		try {
-			await axios.delete(groupsEndpoint.delete(id))
-			setData(data.filter((record) => record.id !== id))
+			await axios.delete(groupsEndpoint.delete(id));
+			setData(data.filter((record) => record.id !== id));
 		} catch (error) {
-			console.error(error)
+			console.error(error);
+			setError(error.message);
 		}
-	}
+	};
 
 	const handleModalSubmit = (newData) => {
-		console.log(newData)
+		console.log(newData);
 		setData((prev) =>
 			prev.map((item) => (item.id === newData.id ? newData : item))
-		)
-		setModal({isShow: false})
-	}
+		);
+		setModal({ isShow: false });
+	};
 
 	const handleEdit = (id) =>
 		setModal({
 			isShow: true,
-			title: 'Edit your group',
+			title: "Edit your group",
 			bodyComponent: (
 				<GroupForm
 					id={id}
-					submitButtonText='Save user'
+					submitButtonText="Save user"
 					onSubmit={handleModalSubmit}
+					setError={setError}
 				/>
 			),
 			id,
-		})
+		});
 
 	return (
 		<Table responsive>
@@ -51,16 +59,10 @@ export const GroupsTable = ({ columns = [], data, setData, setModal }) => {
 						<td>{namegroups}</td>
 						<td>{description}</td>
 						<td>
-							<Button
-								variant='outline-success'
-								onClick={() => handleEdit(id)}
-							>
+							<Button variant="outline-success" onClick={() => handleEdit(id)}>
 								Edit
-							</Button>{' '}
-							<Button
-								variant='outline-danger'
-								onClick={() => handleDelete(id)}
-							>
+							</Button>{" "}
+							<Button variant="outline-danger" onClick={() => handleDelete(id)}>
 								Delete
 							</Button>
 						</td>
@@ -68,5 +70,5 @@ export const GroupsTable = ({ columns = [], data, setData, setModal }) => {
 				))}
 			</tbody>
 		</Table>
-	)
-}
+	);
+};

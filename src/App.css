@@ -6,3 +6,15 @@
 .add-button {
   align-self: flex-end !important;
 }
+
+.error {
+  position: fixed !important;
+  right: 50px;
+  bottom: 50px;
+	z-index: 1056;
+}
+
+
+.hidden {
+  display: none !important;
+}

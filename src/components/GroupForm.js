@@ -3,56 +3,62 @@ import axios from 'axios'
 import { groupsEndpoint } from '../constants/endpoints'
 import { Form, Button } from 'react-bootstrap'
 
-export const GroupForm = ({ onSubmit, id, submitButtonText = '+ Add' }) => {
+export const GroupForm = ({
+	onSubmit,
+	id,
+	submitButtonText = "+ Add",
+	setError,
+}) => {
 	const [formValues, setFormValues] = useState({
-		namegroups: '',
-		description: '',
-	})
+		namegroups: "",
+		description: "",
+	});
 
 	const handleInputChange = (e) => {
-		const target = e.target
-		const value = target.value
-		const name = target.name
-		setFormValues((prev) => ({ ...prev, [name]: value }))
-	}
+		const target = e.target;
+		const value = target.value;
+		const name = target.name;
+		setFormValues((prev) => ({ ...prev, [name]: value }));
+	};
 
 	const handleSubmit = async (e) => {
-		e.preventDefault()
+		e.preventDefault();
 		try {
 			const result = id
 				? await axios.put(groupsEndpoint.update(id), formValues)
-				: await axios.post(groupsEndpoint.create(), formValues)
-			onSubmit(result.data)
+				: await axios.post(groupsEndpoint.create(), formValues);
+			onSubmit(result.data);
 		} catch (err) {
-			console.error(err)
+			console.error(err);
+			setError(err.message)
 		}
-	}
+	};
 
 	return (
 		<Form onSubmit={handleSubmit}>
-			<Form.Group className='mb-3' controlId='formUsername'>
+			<Form.Group className="mb-3" controlId="formUsername">
 				<Form.Label>Group name:</Form.Label>
 				<Form.Control
-					name='namegroups'
+					name="namegroups"
 					value={formValues.namegroups}
 					onChange={handleInputChange}
-					type='text'
-					placeholder='Enter your group name'
+					type="text"
+					placeholder="Enter your group name"
 				/>
 			</Form.Group>
-			<Form.Group className='mb-3' controlId='formUsername'>
+			<Form.Group className="mb-3" controlId="formUsername">
 				<Form.Label>Description:</Form.Label>
 				<Form.Control
-					name='description'
+					name="description"
 					value={formValues.description}
 					onChange={handleInputChange}
-					type='text'
-					placeholder='Enter your group description'
+					type="text"
+					placeholder="Enter your group description"
 				/>
 			</Form.Group>
-			<Button variant='primary' type='submit'>
+			<Button variant="primary" type="submit">
 				{submitButtonText}
 			</Button>
 		</Form>
-	)
-}
+	);
+};
